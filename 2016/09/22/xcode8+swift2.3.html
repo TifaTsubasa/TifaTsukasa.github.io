@@ -1,0 +1,833 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+  <meta name="baidu-site-verification" content="QzcXNBWeKt" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  
+    <link href='//fonts.lug.ustc.edu.cn/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+<link rel="stylesheet" type="text/css" href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" />
+<link rel="icon" type="image/png" href="/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/css/responsive-nav.css" />
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.2"/>
+
+
+    <meta name="description" content="develop & design" />
+
+
+
+  <meta name="keywords" content="develop & design" />
+
+<meta name="apple-itunes-app" content="app-id=986716705" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+<script src="/js/responsive-nav.js"></script>
+<meta name="description" content="Xcode8 GM + Swift3发布，影响最大的就是一直以来使用Swift2.3开发，包含各种依赖lib的成熟项目，虽然Xcode8提供了一键Swift2.3 convert Swift3的选项，但是转换完成后几百个error也是常事。所以，在Xcode8下继续使用Swift2.3开发是简便快速的方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xcode8 + Cocoapods + Swift2.3 适配">
+<meta property="og:url" content="https://tsusolo.com/2016/09/22/xcode8+swift2.3.html">
+<meta property="og:site_name" content="TifaTsubasa">
+<meta property="og:description" content="Xcode8 GM + Swift3发布，影响最大的就是一直以来使用Swift2.3开发，包含各种依赖lib的成熟项目，虽然Xcode8提供了一键Swift2.3 convert Swift3的选项，但是转换完成后几百个error也是常事。所以，在Xcode8下继续使用Swift2.3开发是简便快速的方式。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_cover.png">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_convert.png">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_swift_version.png">
+<meta property="og:updated_time" content="2017-12-01T07:44:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Xcode8 + Cocoapods + Swift2.3 适配">
+<meta name="twitter:description" content="Xcode8 GM + Swift3发布，影响最大的就是一直以来使用Swift2.3开发，包含各种依赖lib的成熟项目，虽然Xcode8提供了一键Swift2.3 convert Swift3的选项，但是转换完成后几百个error也是常事。所以，在Xcode8下继续使用Swift2.3开发是简便快速的方式。">
+<meta name="twitter:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_cover.png">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+<script id="dsq-count-scr" src="//tsufs-blog.disqus.com/count.js" async></script>
+
+
+  <title> Xcode8 + Cocoapods + Swift2.3 适配 | TifaTsubasa </title>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="https://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="https://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="https://schema.org/WPHeader">
+      <div class="header-inner"><div class="nav-collapse  menu-item">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/categories">Category</a></li>
+    <li><a href="https://www.upmer.com" target="_blank">Up</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</div>
+<div class="site-search">
+  
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'QQphPYJCdA2xzyZzYnCZ','2.0.0');
+</script>
+
+
+
+</div>
+<script>
+  var navigation = responsiveNav(".nav-collapse", {
+    animate: true,                    // Boolean: Use CSS3 transitions, true or false
+    transition: 400,                  // Integer: Speed of the transition, in milliseconds
+    label: "Menu",                    // String: Label for the navigation toggle
+//          insert: "after",                  // String: Insert the toggle before or after the navigation
+    customToggle: "",                 // Selector: Specify the ID of a custom toggle
+//    closeOnNavClick: false,           // Boolean: Close the navigation when one of the links are clicked
+//    openPos: "relative",              // String: Position of the opened nav, relative or static
+    navClass: "nav-collapse",         // String: Default CSS class. If changed, you need to edit the CSS too!
+    navActiveClass: "js-nav-active",  // String: Class that is added to <html> element when nav is active
+    jsClass: "js",                    // String: 'JS enabled' class which is added to <html> element
+    init: function(){},               // Function: Init callback
+    open: function(){},               // Function: Open callback
+    close: function(){}               // Function: Close callback
+  });
+</script>
+<!--
+<div class="site-meta custom-logo">
+  
+    <div class="site-meta-headline">
+      <a>
+        <img class="custom-logo-image" src="https://avatars1.githubusercontent.com/u/32269?v=3&s=460"
+             alt="TifaTsubasa"/>
+      </a>
+    </div>
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">TifaTsubasa</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <div width="100%" height="100px"></div>
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <div width="100%" height="100px"></div>
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <div width="100%" height="100px"></div>
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <div width="100%" height="100px"></div>
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <div width="100%" height="100px"></div>
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search icon-next-search"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'QQphPYJCdA2xzyZzYnCZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+-->
+ </div>
+     </header>
+    <div class="sidebar-toggle">
+      <img id="menu-logo" src="/images/avatar.png" />
+      <!--<div class="sidebar-toggle-line-wrap">-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-first"></span>-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-last"></span>-->
+      <!--</div>-->
+    </div>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Xcode8 + Cocoapods + Swift2.3 适配
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <!--发表于-->
+            <time itemprop="dateCreated" datetime="2016-09-22T12:23:05+08:00" content="2016-09-22">
+              2016-09-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_cover.png" alt="Alt text"></p>
+<p>Xcode8 GM + Swift3发布，影响最大的就是一直以来使用Swift2.3开发，包含各种依赖lib的成熟项目，虽然Xcode8提供了一键Swift2.3 convert Swift3的选项，但是转换完成后几百个error也是常事。所以，在Xcode8下继续使用Swift2.3开发是简便快速的方式。<br><a id="more"></a></p>
+<h3 id="项目适配"><a href="#项目适配" class="headerlink" title="项目适配"></a>项目适配</h3><p>1.升级完Xcode8之后，老项目打开之后，会弹出转换到Swift3的提示，两次点击<code>Later</code>忽略它<br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_convert.png" alt="Alt text"></p>
+<blockquote>
+<p>可以通过 Edit -&gt; Convert -&gt; To Current Swift Syntax… 来手动转换到Swift3</p>
+</blockquote>
+<p>2.通过将Build Settings里的<code>Use Legacy Swift Language Version</code>设置为Yes，限定项目的Swift版本为2.3</p>
+<p><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/xcode8_swift2.3/xcode8_swift2.3_swift_version.png" alt="Alt text"></p>
+<h3 id="Cocoapods适配"><a href="#Cocoapods适配" class="headerlink" title="Cocoapods适配"></a>Cocoapods适配</h3><p>我们可以使用上面的方式，同样将<code>Pods</code>project的<code>Use Legacy Swift Language Version</code>设置为Yes，老的项目就能够在Xcode8下以Swift2.3运行了。<br>但是重新运行<code>pod install</code>或<code>pod update</code>安装(更新)pods后，<code>Pods</code>project的<code>Use Legacy Swift Language Version</code>会被重置，我们可以通过pod钩子的方式，自动设置swift版本<br>在<code>Podfile</code>文件头部，加入代码</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">post_install <span class="keyword">do</span> <span class="params">|installer|</span></span><br><span class="line">  installer.pods_project.targets.each <span class="keyword">do</span> <span class="params">|target|</span></span><br><span class="line">    target.build_configurations.each <span class="keyword">do</span> <span class="params">|config|</span></span><br><span class="line">      config.build_settings[<span class="string">'SWIFT_VERSION'</span>] = <span class="string">'2.3'</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>再次运行<code>pod install</code>后，所有的Swift依赖都会被限定为Swift2.3版本运行。</p>
+<h3 id="End"><a href="#End" class="headerlink" title="End"></a>End</h3><p>继续使用Swift2.3只是权宜之策，待各类小问题解决之后，Swift3必然是大势所趋。</p>
+<ul>
+<li>项目代码不是适配Swift3的难点，重点是三方框架</li>
+<li>某些框架的Swift3存在小问题，比如Alamofire，支持Swift3的release 4.0，设备要求是iOS9+，对于项目来说几乎是不可接受的</li>
+<li>Cocoapods和项目project中的<code>Use Legacy Swift Language Version</code>，需要保持相同的设置</li>
+<li>Swift2.3和Swift3的代码不可以混用</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/02/swift-network-flow.html" rel="next" title="我的Swift网络数据处理流">
+                <i class="fa fa-chevron-left"></i> 我的Swift网络数据处理流
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/22/xcode8+swift2.3.html" rel="prev" title="Xcode8 + Cocoapods + Swift2.3 适配">
+                Xcode8 + Cocoapods + Swift2.3 适配 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-73798439-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+
+        
+        <div id="disqus_thread"></div>
+        <script>
+          /**
+          *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+          *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+          /*
+          var disqus_config = function () {
+          this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+          this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+          };
+          */
+          (function() { // DON'T EDIT BELOW THIS LINE
+          var d = document, s = d.createElement('script');
+          s.src = 'https://tsufs-blog.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        
+      </div>
+
+      
+        
+  
+
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <!--<li class="sidebar-nav-overview" data-target="site-overview">-->
+            <!--站点概览-->
+          <!--</li>-->
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <img class="site-author-image" src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/avatar.JPG" alt="TifaTsubasa" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">TifaTsubasa</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">develop & design</p>
+        <!--<nav class="site-state motion-element">-->
+          <!--<div class="site-state-item site-state-posts">-->
+            <!--<a href="/archives">-->
+              <!--<span class="site-state-item-count">7</span>-->
+              <!--<span class="site-state-item-name">日志</span>-->
+            <!--</a>-->
+          <!--</div>-->
+
+          <!--<div class="site-state-item site-state-categories">-->
+            <!--<a href="/categories">-->
+              <!--<span class="site-state-item-count">3</span>-->
+              <!--<span class="site-state-item-name">分类</span>-->
+              <!--</a>-->
+          <!--</div>-->
+
+          <!--<div class="site-state-item site-state-tags">-->
+            <!--<a href="/tags">-->
+              <!--<span class="site-state-item-count">0</span>-->
+              <!--<span class="site-state-item-name">标签</span>-->
+              <!--</a>-->
+          <!--</div>-->
+
+        <!--</nav>-->
+
+        <!---->
+
+        <!--<div class="links-of-author motion-element">-->
+          <!---->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://github.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-github"></i> github-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://twitter.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-twitter"></i> twitter-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://weibo.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-weibo"></i> weibo-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://douban.com/people/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-douban"></i> douban-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://www.zhihu.com/people/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-zhihu"></i> zhihu-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+          <!---->
+        <!--</div>-->
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          <!-- weibo -->
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" target="blank" href="https://weibo.com/u/2697748253" title="@TifaTsubasa on weibo">
+              <i class="fa fa-weibo fa-lg"></i>
+            </a>
+          </li>
+
+          <!--&lt;!&ndash; Linkedin &ndash;&gt;-->
+          <!--<li class="social item hvr-grow-rotate">-->
+          <!--<a rel="me" target="blank" href="https://linkedin.com/in/kikobeats" title="Kikobeats on LinkedIn">-->
+          <!--<i class='icon icon-social-medium'></i>-->
+          <!--<span class="label">Linkedin</span>-->
+          <!--</a>-->
+          <!--</li>-->
+
+          <!-- Github -->
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" target="blank" href="https://github.com/TifaTsubasa" title="TifaTsubasa on Github">
+              <i class='fa fa-github fa-lg'></i>
+            </a>
+          </li>
+
+          <!-- RSS -->
+          <li class="social item hvr-grow-rotate">
+            <a href="/rss/" title="Subscribe to RSS">
+              <i class='fa fa-rss fa-lg'></i>
+            </a>
+          </li>
+
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" href="mailto:tifatsubasa@163.com" title="Subscribe to RSS">
+              <i class='fa fa-envelope-square fa-lg'></i>
+            </a>
+          </li>
+        </div>
+
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目适配"><span class="nav-number">1.</span> <span class="nav-text">项目适配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cocoapods适配"><span class="nav-number">2.</span> <span class="nav-text">Cocoapods适配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#End"><span class="nav-number">3.</span> <span class="nav-text">End</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+
+    
+
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <span class="copyright">
+    TifaTsubasa © 2016. All rights reserved | <a href="https://www.miitbeian.gov.cn/" rel="external nofollow">皖ICP备15007825号-2</a>
+  </span>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.2" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+//      if (isMobile()) {
+//        FastClick.attach(document.body);
+//      }
+
+      motionIntegrator.bootstrap();
+    });
+  </script>
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

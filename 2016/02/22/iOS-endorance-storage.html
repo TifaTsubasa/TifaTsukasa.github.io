@@ -1,0 +1,838 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+  <meta name="baidu-site-verification" content="QzcXNBWeKt" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  
+    <link href='//fonts.lug.ustc.edu.cn/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+<link rel="stylesheet" type="text/css" href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" />
+<link rel="icon" type="image/png" href="/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/css/responsive-nav.css" />
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.2"/>
+
+
+    <meta name="description" content="develop & design" />
+
+
+
+  <meta name="keywords" content="develop & design" />
+
+<meta name="apple-itunes-app" content="app-id=986716705" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+<script src="/js/responsive-nav.js"></script>
+<meta name="description" content="iOS有一道经典的面试题：数据的持久化存储有哪些方式？标准答案：常见的持久化存储方法有NSUserDefaults、plist、归档存文件、sqlite、CoreData已经新兴的Realm这样的答案对付面试官应该是够了，而实际运用中，你真的能搞清这些技术面向的场景么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS-持久化存储技术选型">
+<meta property="og:url" content="https://tsusolo.com/2016/02/22/iOS-endorance-storage.html">
+<meta property="og:site_name" content="TifaTsubasa">
+<meta property="og:description" content="iOS有一道经典的面试题：数据的持久化存储有哪些方式？标准答案：常见的持久化存储方法有NSUserDefaults、plist、归档存文件、sqlite、CoreData已经新兴的Realm这样的答案对付面试官应该是够了，而实际运用中，你真的能搞清这些技术面向的场景么？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq01t.com1.z0.glb.clouddn.com/2016-02-16-1444295065.png">
+<meta property="og:updated_time" content="2017-11-30T08:01:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS-持久化存储技术选型">
+<meta name="twitter:description" content="iOS有一道经典的面试题：数据的持久化存储有哪些方式？标准答案：常见的持久化存储方法有NSUserDefaults、plist、归档存文件、sqlite、CoreData已经新兴的Realm这样的答案对付面试官应该是够了，而实际运用中，你真的能搞清这些技术面向的场景么？">
+<meta name="twitter:image" content="http://7xq01t.com1.z0.glb.clouddn.com/2016-02-16-1444295065.png">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+<script id="dsq-count-scr" src="//tsufs-blog.disqus.com/count.js" async></script>
+
+
+  <title> iOS-持久化存储技术选型 | TifaTsubasa </title>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="https://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="https://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="https://schema.org/WPHeader">
+      <div class="header-inner"><div class="nav-collapse  menu-item">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/categories">Category</a></li>
+    <li><a href="https://www.upmer.com" target="_blank">Up</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</div>
+<div class="site-search">
+  
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'QQphPYJCdA2xzyZzYnCZ','2.0.0');
+</script>
+
+
+
+</div>
+<script>
+  var navigation = responsiveNav(".nav-collapse", {
+    animate: true,                    // Boolean: Use CSS3 transitions, true or false
+    transition: 400,                  // Integer: Speed of the transition, in milliseconds
+    label: "Menu",                    // String: Label for the navigation toggle
+//          insert: "after",                  // String: Insert the toggle before or after the navigation
+    customToggle: "",                 // Selector: Specify the ID of a custom toggle
+//    closeOnNavClick: false,           // Boolean: Close the navigation when one of the links are clicked
+//    openPos: "relative",              // String: Position of the opened nav, relative or static
+    navClass: "nav-collapse",         // String: Default CSS class. If changed, you need to edit the CSS too!
+    navActiveClass: "js-nav-active",  // String: Class that is added to <html> element when nav is active
+    jsClass: "js",                    // String: 'JS enabled' class which is added to <html> element
+    init: function(){},               // Function: Init callback
+    open: function(){},               // Function: Open callback
+    close: function(){}               // Function: Close callback
+  });
+</script>
+<!--
+<div class="site-meta custom-logo">
+  
+    <div class="site-meta-headline">
+      <a>
+        <img class="custom-logo-image" src="https://avatars1.githubusercontent.com/u/32269?v=3&s=460"
+             alt="TifaTsubasa"/>
+      </a>
+    </div>
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">TifaTsubasa</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <div width="100%" height="100px"></div>
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <div width="100%" height="100px"></div>
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <div width="100%" height="100px"></div>
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <div width="100%" height="100px"></div>
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <div width="100%" height="100px"></div>
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search icon-next-search"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'QQphPYJCdA2xzyZzYnCZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+-->
+ </div>
+     </header>
+    <div class="sidebar-toggle">
+      <img id="menu-logo" src="/images/avatar.png" />
+      <!--<div class="sidebar-toggle-line-wrap">-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-first"></span>-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-last"></span>-->
+      <!--</div>-->
+    </div>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS-持久化存储技术选型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <!--发表于-->
+            <time itemprop="dateCreated" datetime="2016-02-22T16:23:05+08:00" content="2016-02-22">
+              2016-02-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>iOS有一道经典的面试题：数据的持久化存储有哪些方式？<br>标准答案：常见的持久化存储方法有NSUserDefaults、plist、归档存文件、sqlite、CoreData已经新兴的Realm<br>这样的答案对付面试官应该是够了，而实际运用中，你真的能搞清这些技术面向的场景么？<br><a id="more"></a></p>
+<hr>
+<h3 id="技术分类"><a href="#技术分类" class="headerlink" title="技术分类"></a>技术分类</h3><ul>
+<li>偏好设置<br>偏好设置是最简单的归档方式，适合存储简单的配置条目。使用NSUserDefaults单例就可以存储一些可序列化的类，通过keyValue的方式写入和读取，偏好设置实际上是一个plist文件</li>
+<li><p>plist文件、归档<br>plist和归档都是将对象整体保存到文件内<br>iOS开发里，plist随处可见，它比较像是json的表格可视化文件，能够存储一些可序列化的类型，如下</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">NSArray</span>;</span><br><span class="line"><span class="type">NSMutableArray</span>;</span><br><span class="line"><span class="type">NSDictionary</span>;</span><br><span class="line"><span class="type">NSMutableDictionary</span>;</span><br><span class="line"><span class="type">NSData</span>;</span><br><span class="line"><span class="type">NSMutableData</span>;</span><br><span class="line"><span class="type">NSString</span>;</span><br><span class="line"><span class="type">NSMutableString</span>;</span><br><span class="line"><span class="type">NSNumber</span>;</span><br><span class="line"><span class="type">NSDate</span>;</span><br></pre></td></tr></table></figure>
+<p>归档能够将遵守<code>NSCoding</code>协议的对象整体打包保存到文件里，从文件里解档读出的对象也可直接使用</p>
+</li>
+<li>sqlite、CoreData、Realm<br>这三类都属于数据库存储，除了能够将数据逐条保存下来，最大的优势就是能够查询。当然，这三类数据库都有着自己的学习曲线，每个都需要一定的时间去掌握</li>
+</ul>
+<h3 id="需求及技术分析"><a href="#需求及技术分析" class="headerlink" title="需求及技术分析"></a>需求及技术分析</h3><p>技术应当紧紧围绕需求，根据不同的用途选择最匹配的方式，很重要！！！（这波给几分🐵）<br>简单举几例，来说明在实际项目中，各存储方式的应用场景</p>
+<ul>
+<li>偏好设置<br>用户的设置：例如字体大小、音乐播放的码率之类的简单数据，APP是否是第一次登陆、版本号等程序需要的参数</li>
+<li>plist文件、归档<br>比如某商品推荐APP，需求希望缓存10个商品，避免网络加载时显示空白。最简便的方法就是将10个商品的模型放进数组，一次性打包成data保存到文件里，需要的时候直接解档就可以使用</li>
+<li>sqlite、CoreData、Realm<br>数据库最大的存储优势其实就在于查询，能想到最需要数据库本地存储，就是TODO List类的APP，需要存储各种事务安排，并且能够分类排序查询</li>
+</ul>
+<hr>
+<h3 id="真·干货-——-TTLite"><a href="#真·干货-——-TTLite" class="headerlink" title="真·干货 —— TTLite"></a>真·干货 —— <a href="https://github.com/TifaTsubasa/TTLite" target="_blank" rel="noopener">TTLite</a></h3><p>在实际的iOS开发中，复杂的本地存储场景是非常少的。很多时候，业务逻辑根本还没有到达需要花大量时间去研究数据库的程度，那么什么样的思路能够满足常见的存储要求呢？<br><strong>轻查询、重存储、易学习且使用方便</strong></p>
+<blockquote>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>TTLite基于SQLite存储，使用FDMB提供的事务进行数据操作，封装了大量的sql语句，将建表、插入、删除、查询等操作封装成更加面对对象的方法，可以直接操作模型对象，整存整取，方便使用</p>
+</blockquote>
+<hr>
+<p><strong>数据库是软件开发里非常重要的一环，在时间允许的情况下，认真研究一门数据库还是非常重要的 ^.^</strong></p>
+<hr>
+<p><strong>如果你也喜爱游戏，欢迎支持我的APP</strong>  <a href="https://itunes.apple.com/app/id986716705" target="_blank" rel="noopener">Up 游戏专辑</a><br><img src="http://7xq01t.com1.z0.glb.clouddn.com/2016-02-16-1444295065.png" alt=""></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/18/custom_navigation_transition_2.html" rel="next" title="自定义navigation controller过渡动画 2">
+                <i class="fa fa-chevron-left"></i> 自定义navigation controller过渡动画 2
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/05/react-native-in-iOS.html" rel="prev" title="在iOS项目中导入React Native">
+                在iOS项目中导入React Native <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-73798439-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+
+        
+        <div id="disqus_thread"></div>
+        <script>
+          /**
+          *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+          *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+          /*
+          var disqus_config = function () {
+          this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+          this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+          };
+          */
+          (function() { // DON'T EDIT BELOW THIS LINE
+          var d = document, s = d.createElement('script');
+          s.src = 'https://tsufs-blog.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        
+      </div>
+
+      
+        
+  
+
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <!--<li class="sidebar-nav-overview" data-target="site-overview">-->
+            <!--站点概览-->
+          <!--</li>-->
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <img class="site-author-image" src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/avatar.JPG" alt="TifaTsubasa" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">TifaTsubasa</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">develop & design</p>
+        <!--<nav class="site-state motion-element">-->
+          <!--<div class="site-state-item site-state-posts">-->
+            <!--<a href="/archives">-->
+              <!--<span class="site-state-item-count">7</span>-->
+              <!--<span class="site-state-item-name">日志</span>-->
+            <!--</a>-->
+          <!--</div>-->
+
+          <!--<div class="site-state-item site-state-categories">-->
+            <!--<a href="/categories">-->
+              <!--<span class="site-state-item-count">3</span>-->
+              <!--<span class="site-state-item-name">分类</span>-->
+              <!--</a>-->
+          <!--</div>-->
+
+          <!--<div class="site-state-item site-state-tags">-->
+            <!--<a href="/tags">-->
+              <!--<span class="site-state-item-count">0</span>-->
+              <!--<span class="site-state-item-name">标签</span>-->
+              <!--</a>-->
+          <!--</div>-->
+
+        <!--</nav>-->
+
+        <!---->
+
+        <!--<div class="links-of-author motion-element">-->
+          <!---->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://github.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-github"></i> github-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://twitter.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-twitter"></i> twitter-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://weibo.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-weibo"></i> weibo-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://douban.com/people/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-douban"></i> douban-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://www.zhihu.com/people/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-zhihu"></i> zhihu-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+          <!---->
+        <!--</div>-->
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          <!-- weibo -->
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" target="blank" href="https://weibo.com/u/2697748253" title="@TifaTsubasa on weibo">
+              <i class="fa fa-weibo fa-lg"></i>
+            </a>
+          </li>
+
+          <!--&lt;!&ndash; Linkedin &ndash;&gt;-->
+          <!--<li class="social item hvr-grow-rotate">-->
+          <!--<a rel="me" target="blank" href="https://linkedin.com/in/kikobeats" title="Kikobeats on LinkedIn">-->
+          <!--<i class='icon icon-social-medium'></i>-->
+          <!--<span class="label">Linkedin</span>-->
+          <!--</a>-->
+          <!--</li>-->
+
+          <!-- Github -->
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" target="blank" href="https://github.com/TifaTsubasa" title="TifaTsubasa on Github">
+              <i class='fa fa-github fa-lg'></i>
+            </a>
+          </li>
+
+          <!-- RSS -->
+          <li class="social item hvr-grow-rotate">
+            <a href="/rss/" title="Subscribe to RSS">
+              <i class='fa fa-rss fa-lg'></i>
+            </a>
+          </li>
+
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" href="mailto:tifatsubasa@163.com" title="Subscribe to RSS">
+              <i class='fa fa-envelope-square fa-lg'></i>
+            </a>
+          </li>
+        </div>
+
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#技术分类"><span class="nav-number">1.</span> <span class="nav-text">技术分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#需求及技术分析"><span class="nav-number">2.</span> <span class="nav-text">需求及技术分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#真·干货-——-TTLite"><span class="nav-number">3.</span> <span class="nav-text">真·干货 —— TTLite</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍"><span class="nav-number">3.1.</span> <span class="nav-text">介绍</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+
+    
+
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <span class="copyright">
+    TifaTsubasa © 2016. All rights reserved | <a href="https://www.miitbeian.gov.cn/" rel="external nofollow">皖ICP备15007825号-2</a>
+  </span>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.2" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+//      if (isMobile()) {
+//        FastClick.attach(document.body);
+//      }
+
+      motionIntegrator.bootstrap();
+    });
+  </script>
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

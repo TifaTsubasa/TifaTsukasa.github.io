@@ -1,0 +1,863 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+  <meta name="baidu-site-verification" content="QzcXNBWeKt" />
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+  
+    <link href='//fonts.lug.ustc.edu.cn/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+<link rel="stylesheet" type="text/css" href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" />
+<link rel="icon" type="image/png" href="/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/css/responsive-nav.css" />
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.2"/>
+
+
+    <meta name="description" content="develop & design" />
+
+
+
+  <meta name="keywords" content="develop & design" />
+
+<meta name="apple-itunes-app" content="app-id=986716705" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+<script src="/js/responsive-nav.js"></script>
+<meta name="description" content="React Native的势头越来越猛，但凡提及Native，皆是一片666，大有替代原生APP的趋势，也许Native有着大好形势，但目前看来，尚有太多不足。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在iOS项目中导入React Native">
+<meta property="og:url" content="https://tsusolo.com/2016/04/05/react-native-in-iOS.html">
+<meta property="og:site_name" content="TifaTsubasa">
+<meta property="og:description" content="React Native的势头越来越猛，但凡提及Native，皆是一片666，大有替代原生APP的趋势，也许Native有着大好形势，但目前看来，尚有太多不足。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-logo">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-natigation.png">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-react-view.png">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-error">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-pllist">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-github-search">
+<meta property="og:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/upmer_qrcode.png">
+<meta property="og:updated_time" content="2017-12-01T07:53:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在iOS项目中导入React Native">
+<meta name="twitter:description" content="React Native的势头越来越猛，但凡提及Native，皆是一片666，大有替代原生APP的趋势，也许Native有着大好形势，但目前看来，尚有太多不足。">
+<meta name="twitter:image" content="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-logo">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post'
+  };
+</script>
+<script id="dsq-count-scr" src="//tsufs-blog.disqus.com/count.js" async></script>
+
+
+  <title> 在iOS项目中导入React Native | TifaTsubasa </title>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="https://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="https://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="https://schema.org/WPHeader">
+      <div class="header-inner"><div class="nav-collapse  menu-item">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/categories">Category</a></li>
+    <li><a href="https://www.upmer.com" target="_blank">Up</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</div>
+<div class="site-search">
+  
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'QQphPYJCdA2xzyZzYnCZ','2.0.0');
+</script>
+
+
+
+</div>
+<script>
+  var navigation = responsiveNav(".nav-collapse", {
+    animate: true,                    // Boolean: Use CSS3 transitions, true or false
+    transition: 400,                  // Integer: Speed of the transition, in milliseconds
+    label: "Menu",                    // String: Label for the navigation toggle
+//          insert: "after",                  // String: Insert the toggle before or after the navigation
+    customToggle: "",                 // Selector: Specify the ID of a custom toggle
+//    closeOnNavClick: false,           // Boolean: Close the navigation when one of the links are clicked
+//    openPos: "relative",              // String: Position of the opened nav, relative or static
+    navClass: "nav-collapse",         // String: Default CSS class. If changed, you need to edit the CSS too!
+    navActiveClass: "js-nav-active",  // String: Class that is added to <html> element when nav is active
+    jsClass: "js",                    // String: 'JS enabled' class which is added to <html> element
+    init: function(){},               // Function: Init callback
+    open: function(){},               // Function: Open callback
+    close: function(){}               // Function: Close callback
+  });
+</script>
+<!--
+<div class="site-meta custom-logo">
+  
+    <div class="site-meta-headline">
+      <a>
+        <img class="custom-logo-image" src="https://avatars1.githubusercontent.com/u/32269?v=3&s=460"
+             alt="TifaTsubasa"/>
+      </a>
+    </div>
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">TifaTsubasa</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <div width="100%" height="100px"></div>
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <div width="100%" height="100px"></div>
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <div width="100%" height="100px"></div>
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <div width="100%" height="100px"></div>
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <div width="100%" height="100px"></div>
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search icon-next-search"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'QQphPYJCdA2xzyZzYnCZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+-->
+ </div>
+     </header>
+    <div class="sidebar-toggle">
+      <img id="menu-logo" src="/images/avatar.png" />
+      <!--<div class="sidebar-toggle-line-wrap">-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-first"></span>-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>-->
+      <!--<span class="sidebar-toggle-line sidebar-toggle-line-last"></span>-->
+      <!--</div>-->
+    </div>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                在iOS项目中导入React Native
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <!--发表于-->
+            <time itemprop="dateCreated" datetime="2016-04-05T11:23:05+08:00" content="2016-04-05">
+              2016-04-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/React-Native/" itemprop="url" rel="index">
+                    <span itemprop="name">React Native</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>React Native的势头越来越猛，但凡提及Native，皆是一片666，大有替代原生APP的趋势，也许Native有着大好形势，但目前看来，尚有太多不足。<br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-logo" alt="Alt text"><br><a id="more"></a></p>
+<h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><h5 id="在iOS原生项目中动态使用React-Native定制界面"><a href="#在iOS原生项目中动态使用React-Native定制界面" class="headerlink" title="在iOS原生项目中动态使用React Native定制界面"></a>在iOS原生项目中动态使用React Native定制界面</h5><p>如果你已经是一个iOS开发者，继续原生项目开发可能是更好的选择，而React Native，也许更加适合原生项目中部分动态页(例如广告、咨询详情)的编写，方便页面的多端重用和即时修改。<br><a href="https://github.com/TifaTsubasa/SimpleNative" target="_blank" rel="noopener">完整项目Github地址</a></p>
+<h4 id="1-安装环境"><a href="#1-安装环境" class="headerlink" title="1.安装环境"></a>1.安装环境</h4><p>如果你之前只接触过iOS开发，使用终端也仅限于CocoaPods、Git，那么环境配置一定会费一番劲。</p>
+<ul>
+<li><p>安装Node.js<br>  Node.js官方下载：<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">https://nodejs.org/en/download/</a><br>  在官网可以下载到对应系统的Node安装包，非常简单</p>
+<blockquote>
+<p>推荐使用nvm安装管理Node.js，能够更好的控制node的版本<br>  nvm github地址：<a href="https://github.com/creationix/nvm" target="_blank" rel="noopener">https://github.com/creationix/nvm</a><br>  中文安装方法：<a href="http://www.tuicool.com/articles/vmi6Zv7" target="_blank" rel="noopener">http://www.tuicool.com/articles/vmi6Zv7</a></p>
+</blockquote>
+</li>
+<li><p>安装CocoaPods<br>  CocoaPods是iOS开发最常用的依赖管理工具<br>  CocoaPods安装使用方法：<a href="http://blog.devtang.com/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="noopener">唐巧blog</a></p>
+</li>
+</ul>
+<h4 id="2-iOS原生项目"><a href="#2-iOS原生项目" class="headerlink" title="2.iOS原生项目"></a>2.iOS原生项目</h4><p>我们需要准备一个简单的原生项目<code>SimpleNative</code>，选用的语言是<strong>Swift</strong><br>在<code>Main.storyboard</code>中初始化项目框架：导航控制器内有两层视图控制器，在第一层Controller中居中设置一个button用来push，第二层Controller空白待用<br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-natigation.png" alt="Alt text"></p>
+<h4 id="3-初始化React-Native的node依赖"><a href="#3-初始化React-Native的node依赖" class="headerlink" title="3.初始化React Native的node依赖"></a>3.初始化React Native的node依赖</h4><h5 id="1-初始化node"><a href="#1-初始化node" class="headerlink" title="1.初始化node"></a>1.初始化node</h5><p>在终端中，定位到iOS项目的根目录，运行<br><code>npm init</code><br>然后一路回车即可</p>
+<blockquote>
+<p>注意：node项目的命名不能使用大写字母，所以指定name时输入<code>simple-native</code> 后回车</p>
+</blockquote>
+<p>执行完毕之后，在项目根目录下生成了一个<code>package.json</code>文件，类似于CocoaPods的<code>Podfile</code>文件，用来管理项目依赖</p>
+<h5 id="2-安装React-Native"><a href="#2-安装React-Native" class="headerlink" title="2.安装React Native"></a>2.安装React Native</h5><p>再项目根目录下运行<br><code>npm install --save react-native</code></p>
+<blockquote>
+<p>由于国内的网络问题，npm安装比较缓慢，可以使用<a href="http://npm.taobao.org/" target="_blank" rel="noopener">淘宝npm镜像</a>替代</p>
+</blockquote>
+<p>安装完毕之后，根目录下会生成<code>node_modules</code>文件夹，里面保存了<code>react</code>和<code>react-native</code>的依赖<br><code>--save</code>参数会在<code>package.json</code>文件中保存<code>react</code>和<code>react-native</code>的依赖声明</p>
+<h4 id="4-初始化CocoaPods"><a href="#4-初始化CocoaPods" class="headerlink" title="4.初始化CocoaPods"></a>4.初始化CocoaPods</h4><p>在项目根目录下，运行<br><code>pod init</code><br>在项目根目录下生成了<code>Podfile</code>，用任何编辑器打开，编写React Native的依赖<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">platform <span class="symbol">:ios</span>, <span class="string">'7.0'</span></span><br><span class="line"></span><br><span class="line">target <span class="string">'SimpleNative'</span> <span class="keyword">do</span></span><br><span class="line">  pod <span class="string">'React'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'./node_modules/react-native'</span>, <span class="symbol">:subspecs</span> =&gt; [</span><br><span class="line">    <span class="string">'Core'</span>,</span><br><span class="line">    <span class="string">'RCTImage'</span>,</span><br><span class="line">    <span class="string">'RCTNetwork'</span>,</span><br><span class="line">    <span class="string">'RCTText'</span>,</span><br><span class="line">    <span class="string">'RCTWebSocket'</span>,</span><br><span class="line">    <span class="comment"># Add any other subspecs you want to use in your project</span></span><br><span class="line">  ]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">target <span class="string">'SimpleNativeTests'</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">target <span class="string">'SimpleNativeUITests'</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<p>在项目的target下，pod导入<code>React</code>，路径指向了当前目录下<code>&#39;./node_modules/react-native&#39;</code>，然后还有一堆乱七八糟的子依赖(一个都不能少！)<br>运行<code>pod install</code>安装依赖，本地安装速度很快</p>
+<h4 id="5-绑定Native的视图"><a href="#5-绑定Native的视图" class="headerlink" title="5.绑定Native的视图"></a>5.绑定Native的视图</h4><h5 id="1-导入Native-View"><a href="#1-导入Native-View" class="headerlink" title="1.导入Native View"></a>1.导入Native View</h5><p>由于使用的是Swift项目，我们需要一个OC-Swift桥接文件导入Native的类，在桥接文件夹导入<br><code>#import &lt;RCTRootView.h&gt;</code></p>
+<h5 id="2-设置Native-View"><a href="#2-设置Native-View" class="headerlink" title="2.设置Native View"></a>2.设置Native View</h5><p>点击<code>SimpleNative.xcworkspace</code>打开iOS项目，新建一个<code>ReactView</code>继承于UIView，并为这个view添加RCTRootView的子视图<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReactView</span>: <span class="title">UIView</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> rootView: <span class="type">RCTRootView</span>!</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>?(coder aDecoder: <span class="type">NSCoder</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(coder: aDecoder)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> jsCodeLocation = <span class="type">NSURL</span>(string: <span class="string">"http://localhost:8081/index.ios.bundle?platform=ios"</span>)</span><br><span class="line">        <span class="keyword">let</span> rootView = <span class="type">RCTRootView</span>(bundleURL: jsCodeLocation, moduleName: <span class="string">"SimpleNative"</span>, initialProperties: <span class="literal">nil</span>, launchOptions: <span class="literal">nil</span>)</span><br><span class="line">        <span class="keyword">self</span>.rootView = rootView</span><br><span class="line">        <span class="keyword">self</span>.addSubview(rootView)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">layoutSubviews</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.layoutSubviews()</span><br><span class="line">        rootView.frame = <span class="keyword">self</span>.bounds</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后在第二层控制器中居中显示一个View，并绑定为<code>ReactView</code><br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-react-view.png" alt="Alt text"></p>
+<p>再次运行项目，点击push按钮后，就会见到第一个红彤彤的Native错误了，但是这表示已经成功绑定了Native<br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-error" alt="Alt text"></p>
+<h4 id="6-启动Native服务"><a href="#6-启动Native服务" class="headerlink" title="6.启动Native服务"></a>6.启动Native服务</h4><p>在ReactView的初始化中，我们为rootView指定了bundleURL和moduleName，其中moduleName既是当前项目名，而bundleURL，就要一步一步实现了，步步都是坑😓</p>
+<h5 id="1-新建index-ios-js"><a href="#1-新建index-ios-js" class="headerlink" title="1.新建index.ios.js"></a>1.新建index.ios.js</h5><p>在项目根目标下，新建ReactComponents文件夹，并在文件夹中新建<code>index.ios.js</code>文件，在js文件中<br>写入react代码<br>官方推荐的简单代码为<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> React, &#123;</span><br><span class="line">  Text,</span><br><span class="line">  View</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> styles = React.StyleSheet.create(&#123;</span><br><span class="line">  container: &#123;</span><br><span class="line">    flex: <span class="number">1</span>,</span><br><span class="line">    backgroundColor: <span class="string">'red'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleNative</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;View style=&#123;styles.container&#125;&gt;</span><br><span class="line">        &lt;Text&gt;This is a simple application.&lt;<span class="regexp">/Text&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>View&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">React.AppRegistry.registerComponent(<span class="string">'SimpleNative'</span>, () =&gt; SimpleNative);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>如果你希望显示一个更帅气的Native界面，可以拷贝链接代码：<a href="http://7xq01t.com1.z0.glb.clouddn.com/index.ios.js" target="_blank" rel="noopener">Github搜索页</a></p>
+</blockquote>
+<h5 id="2-启动node服务"><a href="#2-启动node服务" class="headerlink" title="2.启动node服务"></a>2.启动node服务</h5><p>建好了js文件，需要启动一个端口为8081的服务将index.ios.js打包成index.ios.bundle<br>在项目根目录下运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(JS_DIR=`pwd`/ReactComponents; cd node_modules/react-native; npm run start -- --root $JS_DIR)</span><br></pre></td></tr></table></figure></p>
+<p>分解一下命令：<br>1.将新建的ReactComponents文件夹目录赋值到JS_DIR上，注意需要是全路径！！！<br>2.进入<code>node_modules/react-native</code><br>3.绑定<code>JS_DIR</code>会监听ReactComponents文件夹下的文件，然后<code>npm run start</code>启动native的node服务<br>4.三行命令最好用()包装起来，可以避免运行后定位到<code>node_modules/react-native</code>文件夹下</p>
+<p><strong>再次运行iOS项目，当然也可以直接在模拟器上 Commend + R刷新，就会获得另一个错误。。。</strong><br><del>~</del></p>
+<h5 id="3-开启Http支持"><a href="#3-开启Http支持" class="headerlink" title="3.开启Http支持"></a>3.开启Http支持</h5><p>苹果在iOS9之后默认关闭了对HTTP的支持，需要打开以访问localhost的服务<br>在iOS项目的<code>Info.plist</code>文件中，加入<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>NSAppTransportSecurity<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSExceptionDomains<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>localhost<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSTemporaryExceptionAllowsInsecureHTTPLoads<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>加入后，plist看起来是这样的<br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-pllist" alt="Alt text"><br>更多关于<a href="http://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http" target="_blank" rel="noopener">App Transport Security</a></p>
+<h4 id="7-最后"><a href="#7-最后" class="headerlink" title="7.最后"></a>7.最后</h4><p>重新运行iOS项目，点击push按钮后，在绿色加载条之后(第一次打包编译比较慢)，就能看到native的界面了，在搜索栏输入内容后回车，能够简单搜索Github内容（需要在index.ios.js添加<a href="http://7xq01t.com1.z0.glb.clouddn.com/index.ios.js" target="_blank" rel="noopener">Github搜索页</a>代码）<br><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/react_native_in_ios/simple-native-github-search" alt="Alt text"></p>
+<p>如果将ReactView放置全屏显示，就更像一个原生的应用了 😉</p>
+<hr>
+<p><strong>如果你也喜爱游戏，欢迎支持我的APP</strong>  <a href="https://itunes.apple.com/app/id986716705" target="_blank" rel="noopener">Up 游戏专辑</a></p>
+<p><img src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/2016/upmer_qrcode.png" alt=""></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/22/iOS-endorance-storage.html" rel="next" title="iOS-持久化存储技术选型">
+                <i class="fa fa-chevron-left"></i> iOS-持久化存储技术选型
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/02/swift-network-flow.html" rel="prev" title="我的Swift网络数据处理流">
+                我的Swift网络数据处理流 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-73798439-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+
+        
+        <div id="disqus_thread"></div>
+        <script>
+          /**
+          *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+          *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+          /*
+          var disqus_config = function () {
+          this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+          this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+          };
+          */
+          (function() { // DON'T EDIT BELOW THIS LINE
+          var d = document, s = d.createElement('script');
+          s.src = 'https://tsufs-blog.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        
+      </div>
+
+      
+        
+  
+
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <!--<li class="sidebar-nav-overview" data-target="site-overview">-->
+            <!--站点概览-->
+          <!--</li>-->
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <img class="site-author-image" src="https://up-app.oss-cn-hangzhou.aliyuncs.com/blog/avatar.JPG" alt="TifaTsubasa" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">TifaTsubasa</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">develop & design</p>
+        <!--<nav class="site-state motion-element">-->
+          <!--<div class="site-state-item site-state-posts">-->
+            <!--<a href="/archives">-->
+              <!--<span class="site-state-item-count">7</span>-->
+              <!--<span class="site-state-item-name">日志</span>-->
+            <!--</a>-->
+          <!--</div>-->
+
+          <!--<div class="site-state-item site-state-categories">-->
+            <!--<a href="/categories">-->
+              <!--<span class="site-state-item-count">3</span>-->
+              <!--<span class="site-state-item-name">分类</span>-->
+              <!--</a>-->
+          <!--</div>-->
+
+          <!--<div class="site-state-item site-state-tags">-->
+            <!--<a href="/tags">-->
+              <!--<span class="site-state-item-count">0</span>-->
+              <!--<span class="site-state-item-name">标签</span>-->
+              <!--</a>-->
+          <!--</div>-->
+
+        <!--</nav>-->
+
+        <!---->
+
+        <!--<div class="links-of-author motion-element">-->
+          <!---->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://github.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-github"></i> github-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://twitter.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-twitter"></i> twitter-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://weibo.com/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-weibo"></i> weibo-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://douban.com/people/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-douban"></i> douban-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+              <!--<span class="links-of-author-item">-->
+                <!--<a href="https://www.zhihu.com/people/your-user-name" target="_blank">-->
+                  <!--<i class="fa fa-zhihu"></i> zhihu-->
+                <!--</a>-->
+              <!--</span>-->
+            <!---->
+          <!---->
+        <!--</div>-->
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          <!-- weibo -->
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" target="blank" href="https://weibo.com/u/2697748253" title="@TifaTsubasa on weibo">
+              <i class="fa fa-weibo fa-lg"></i>
+            </a>
+          </li>
+
+          <!--&lt;!&ndash; Linkedin &ndash;&gt;-->
+          <!--<li class="social item hvr-grow-rotate">-->
+          <!--<a rel="me" target="blank" href="https://linkedin.com/in/kikobeats" title="Kikobeats on LinkedIn">-->
+          <!--<i class='icon icon-social-medium'></i>-->
+          <!--<span class="label">Linkedin</span>-->
+          <!--</a>-->
+          <!--</li>-->
+
+          <!-- Github -->
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" target="blank" href="https://github.com/TifaTsubasa" title="TifaTsubasa on Github">
+              <i class='fa fa-github fa-lg'></i>
+            </a>
+          </li>
+
+          <!-- RSS -->
+          <li class="social item hvr-grow-rotate">
+            <a href="/rss/" title="Subscribe to RSS">
+              <i class='fa fa-rss fa-lg'></i>
+            </a>
+          </li>
+
+          <li class="social item hvr-grow-rotate">
+            <a rel="me" href="mailto:tifatsubasa@163.com" title="Subscribe to RSS">
+              <i class='fa fa-envelope-square fa-lg'></i>
+            </a>
+          </li>
+        </div>
+
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#开始"><span class="nav-number">1.</span> <span class="nav-text">开始</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#在iOS原生项目中动态使用React-Native定制界面"><span class="nav-number">1.0.1.</span> <span class="nav-text">在iOS原生项目中动态使用React Native定制界面</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-安装环境"><span class="nav-number">1.1.</span> <span class="nav-text">1.安装环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-iOS原生项目"><span class="nav-number">1.2.</span> <span class="nav-text">2.iOS原生项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-初始化React-Native的node依赖"><span class="nav-number">1.3.</span> <span class="nav-text">3.初始化React Native的node依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-初始化node"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.初始化node</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-安装React-Native"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.安装React Native</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-初始化CocoaPods"><span class="nav-number">1.4.</span> <span class="nav-text">4.初始化CocoaPods</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-绑定Native的视图"><span class="nav-number">1.5.</span> <span class="nav-text">5.绑定Native的视图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-导入Native-View"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.导入Native View</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-设置Native-View"><span class="nav-number">1.5.2.</span> <span class="nav-text">2.设置Native View</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-启动Native服务"><span class="nav-number">1.6.</span> <span class="nav-text">6.启动Native服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-新建index-ios-js"><span class="nav-number">1.6.1.</span> <span class="nav-text">1.新建index.ios.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-启动node服务"><span class="nav-number">1.6.2.</span> <span class="nav-text">2.启动node服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-开启Http支持"><span class="nav-number">1.6.3.</span> <span class="nav-text">3.开启Http支持</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-最后"><span class="nav-number">1.7.</span> <span class="nav-text">7.最后</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+
+    
+
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <span class="copyright">
+    TifaTsubasa © 2016. All rights reserved | <a href="https://www.miitbeian.gov.cn/" rel="external nofollow">皖ICP备15007825号-2</a>
+  </span>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.2" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+//      if (isMobile()) {
+//        FastClick.attach(document.body);
+//      }
+
+      motionIntegrator.bootstrap();
+    });
+  </script>
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
